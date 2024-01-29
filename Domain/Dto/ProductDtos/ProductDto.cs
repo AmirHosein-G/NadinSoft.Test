@@ -1,27 +1,7 @@
-﻿using Domain.Entiys;
-
-namespace Domain.Dto.ProductDtos;
+﻿namespace Domain.Dto.ProductDtos;
 
 public class ProductDto
 {
-    public ProductDto(string name, DateTime produceDate, string manufacturePhone, string manufactureEmail, bool isAvailable)
-    {
-        Name = name;
-        ProduceDate = produceDate;
-        ManufacturePhone = manufacturePhone;
-        ManufactureEmail = manufactureEmail;
-        IsAvailable = isAvailable;
-    }
-    public ProductDto(Product product)
-    {
-        Id = product.Id;
-        Name = product.Name;
-        ProduceDate = product.ProduceDate;
-        ManufacturePhone = product.ManufacturePhone;
-        ManufactureEmail = product.ManufactureEmail;
-        IsAvailable = product.IsAvailable;
-    }
-
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public DateTime ProduceDate { get; set; }

@@ -1,12 +1,13 @@
 ﻿using Application.Products.Commands.CreateProduct;
 using Application.Products.Queries.GetProducts;
+using AutoMapper;
 using Domain.Dto.ProductDtos;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace API.Controllers;
 
@@ -14,10 +15,13 @@ namespace API.Controllers;
 [ApiController]
 public partial class ProductsController : ControllerBase
 {
-    public readonly IMediator mediator;
-    public ProductsController(IMediator mediator)
+    private readonly IMediator mediator;
+    private readonly IMapper mapper;
+
+    public ProductsController(IMediator mediator, IMapper mapper)
     {
         this.mediator = mediator;
+        this.mapper = mapper;
     }
 
     [AllowAnonymous]
@@ -28,7 +32,7 @@ public partial class ProductsController : ControllerBase
         {
             ProductsResponce result = await mediator.Send(new GetProductsQuery(model.UserId), cancellationToken);
 
-            return Ok(result);
+            return Ok(mapper.Map<List<ProductDto>>(result.Products));
         }
         catch (Exception ex)
         {

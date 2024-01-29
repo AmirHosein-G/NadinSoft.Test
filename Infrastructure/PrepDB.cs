@@ -27,7 +27,7 @@ public static class PrepDB
 
             context.Users.AddRange(
                 new User("AmirHosein", "Pa$$w0rd"),
-                new User("NodeinSoft", "password"));
+                new User("NadinSoft", "password"));
             context.SaveChanges();
         }
         if (!context.Products.Any())

@@ -1,5 +1,6 @@
 ﻿using Domain.Abstractions;
 using Domain.Dto.ProductDtos;
+using Domain.Entiys;
 using MediatR;
 
 namespace Application.Products.Queries.GetProducts;
@@ -15,7 +16,7 @@ internal sealed class GetProductsQueryHandler: IRequestHandler<GetProductsQuery,
 
     public async Task<ProductsResponce> Handle(GetProductsQuery query, CancellationToken cancellationToken)
     {
-        List<ProductDto> products = await _productReadRepository.GetProductsAsync(query.UserId, cancellationToken);
+        List<Product> products = await _productReadRepository.GetProductsAsync(query.UserId, cancellationToken);
 
         return new ProductsResponce()
         {

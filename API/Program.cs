@@ -1,14 +1,10 @@
-﻿using API.OptionsSetup;
-using Application;
+﻿using Application;
 using Infrastructure;
-using Infrastructure.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Presentation;
-using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -87,6 +83,7 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddHealthChecks();
 
