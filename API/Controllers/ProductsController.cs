@@ -4,13 +4,15 @@ using Domain.Dto.ProductDtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductsController : ControllerBase
+public partial class ProductsController : ControllerBase
 {
     public readonly IMediator mediator;
     public ProductsController(IMediator mediator)
@@ -20,11 +22,11 @@ public class ProductsController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("GetProducts")]
-    public async Task<ActionResult> GetProducts(CancellationToken cancellationToken)
+    public async Task<ActionResult> GetProducts([FromQuery] GetProducsDto model,CancellationToken cancellationToken)
     {
         try
         {
-            ProductsResponce result = await mediator.Send(new GetProductsQuery(), cancellationToken);
+            ProductsResponce result = await mediator.Send(new GetProductsQuery(model.UserId), cancellationToken);
 
             return Ok(result);
         }
@@ -39,9 +41,15 @@ public class ProductsController : ControllerBase
     {
         try
         {
-            var userId = User.Claims.First().Value;
+            (bool success, string message) = Validation(product.ManufactureEmail, product.ManufacturePhone);
+            if (!success)
+            {
+                throw new Exception(message);
+            }
 
-            bool result = await mediator.Send(new CreateProductCommand(product), cancellationToken);
+            string userId = User.Claims.First().Value;
+
+            bool result = await mediator.Send(new CreateProductCommand(product, Convert.ToInt32(userId)), cancellationToken);
 
             return Ok(result);
         }
@@ -52,11 +60,19 @@ public class ProductsController : ControllerBase
     }
     [Authorize]
     [HttpPut("Update")]
-    public async Task<ActionResult> Update(UpdateProductDto model, CancellationToken cancellationToken)
+    public async Task<ActionResult> Update(UpdateProductDto product, CancellationToken cancellationToken)
     {
         try
         {
-            bool result = await mediator.Send(new UpdateProductCommand(model), cancellationToken);
+            (bool success, string message) = Validation(product.ManufactureEmail, product.ManufacturePhone);
+            if (!success)
+            {
+                throw new Exception(message);
+            }
+
+            string userId = User.Claims.First().Value;
+
+            bool result = await mediator.Send(new UpdateProductCommand(product, Convert.ToInt32(userId)), cancellationToken);
 
             return Ok(result);
         }
@@ -71,7 +87,9 @@ public class ProductsController : ControllerBase
     {
         try
         {
-            bool result = await mediator.Send(new DeleteProductCommand(model.ProductId, model.UserId), cancellationToken);
+            string userId = User.Claims.First().Value;
+
+            bool result = await mediator.Send(new DeleteProductCommand(model.ProductId, Convert.ToInt32(userId)), cancellationToken);
 
             return Ok(result);
         }
@@ -80,4 +98,26 @@ public class ProductsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [NonAction]
+    private static (bool, string) Validation(string email, string phoneNumber)
+    {
+        bool emailIsValid = new EmailAddressAttribute().IsValid(email);
+        bool phoneNumberIsValid = Regex.Match(phoneNumber, @"[0-9]").Success;
+
+        if (!emailIsValid || !phoneNumberIsValid)
+        {
+            if (emailIsValid)
+            {
+                return (false, "phone number is not valid");
+            }
+            if (phoneNumberIsValid)
+            {
+                return (false, "Email is not valid");
+            }
+            return (false, "Email and phone number are not valid");
+        }
+        return (true, "Success");
+    }
+
 }

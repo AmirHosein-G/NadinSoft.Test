@@ -26,10 +26,6 @@ internal sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginRespo
 
         string token = _jwtProvider.Generate(user, cancellationToken);
 
-
-        return new LoginResponce()
-        {
-            Token = token,
-        };
+        return new LoginResponce(token);
     }
 }

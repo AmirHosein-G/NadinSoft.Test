@@ -6,6 +6,6 @@ public interface IIdentityWriteRepository
 {
     Task<bool> SaveChangesAsync(CancellationToken cancellationToken);
 
-    Task InsertAsync(User user, CancellationToken cancellationToken);
+    Task<bool> InsertAsync(User user, CancellationToken cancellationToken);
 
 }

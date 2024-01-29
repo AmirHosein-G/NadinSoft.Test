@@ -5,8 +5,23 @@ namespace Domain.Entiys;
 
 public class Product : Entity
 {
-    public Product(int id,string name, DateTime produceDate, string manufacturePhone, string manufactureEmail, bool isAvailable, int userId) 
+    public Product(int id,
+                   string name,
+                   DateTime produceDate,
+                   string manufacturePhone,
+                   string manufactureEmail,
+                   bool isAvailable,
+                   int userId)
         : base(id)
+    {
+        Name = name;
+        ProduceDate = produceDate;
+        ManufacturePhone = manufacturePhone;
+        ManufactureEmail = manufactureEmail;
+        IsAvailable = isAvailable;
+        UserId = userId;
+    }
+    public Product(string name, DateTime produceDate, string manufacturePhone, string manufactureEmail, bool isAvailable, int userId) 
     {
         Name = name;
         ProduceDate = produceDate;
@@ -28,6 +43,7 @@ public class Product : Entity
     [MaxLength(255)]
     public string ManufactureEmail { get; set; } = string.Empty;
     public bool IsAvailable { get; set; } = true;
+    public bool Deleted { get; set; } = false;
 
     public int UserId { get; set; }
     public virtual User User { get; set; }
@@ -45,6 +61,6 @@ public class Product : Entity
     // usually i use a property whit the name of IsDeleted bu in this case i just turn the availbility of the products
     public void Delete()
     {
-        IsAvailable = false;
+        Deleted = true;
     }
 }

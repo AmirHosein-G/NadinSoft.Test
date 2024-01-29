@@ -2,4 +2,4 @@
 
 namespace Application.Products.Queries.GetProducts;
 
-public sealed record GetProductsQuery(): IRequest<ProductsResponce>;
+public sealed record GetProductsQuery(int? UserId): IRequest<ProductsResponce>;

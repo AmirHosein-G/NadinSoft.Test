@@ -24,12 +24,10 @@ public sealed class IdentityController : ControllerBase
             bool result = await mediator.Send(new CreateUserCommand(model), cancellationToken);
             if (!result)
             {
-                throw new Exception();
+                throw new Exception("Upration failure");
             }
 
-            GetUserResponce user = await mediator.Send(new GetUserQuery(model.UserName, model.Password), cancellationToken);
-
-            return Ok(user);
+            return RedirectToAction("Login", new LoginQuery(model.UserName, model.Password));
         }
         catch (Exception ex)
         {
@@ -42,6 +40,7 @@ public sealed class IdentityController : ControllerBase
     {
         try
         {
+            //Login action acctually shoud be a command to keep track of users but in his case it just porvieds a jwt token
             LoginResponce result = await mediator.Send(new LoginQuery(model.UserName, model.Password), cancellationToken);
 
             return Ok(result);

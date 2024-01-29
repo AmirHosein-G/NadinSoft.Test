@@ -19,7 +19,10 @@ internal sealed class DeleteProductCommandHandler : IRequestHandler<DeleteProduc
 
     public async Task<bool> Handle(DeleteProductCommand command, CancellationToken cancellationToken)
     {
-        Product product = await _productReadRepository.GetProductAsync(command.productId, cancellationToken);
+        Product product = await _productReadRepository.GetProductAsync(command.ProductId, cancellationToken);
+
+        if (product.UserId != command.UserId)
+            throw new Exception("Access denied");
 
         product.Delete();
 

@@ -16,7 +16,7 @@ public class IdentityWriteRepository : IIdentityWriteRepository
 
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        if (Convert.ToBoolean(await _context.SaveChangesAsync()))
+        if (Convert.ToBoolean(await _context.SaveChangesAsync(cancellationToken)))
         { return true; }
         else
         { throw new Exception("Failed to save data"); }
@@ -25,11 +25,13 @@ public class IdentityWriteRepository : IIdentityWriteRepository
     public async Task<bool> RegisteAsync(User user, CancellationToken cancellationToken)
     {
         _context.Users.Add(user);
-        return await SaveChangesAsync();
+        return await SaveChangesAsync(cancellationToken);
     }
 
-    public Task InsertAsync(User user, CancellationToken cancellationToken)
+    public async Task<bool> InsertAsync(User user, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _context.Set<User>().AddAsync(user, cancellationToken);
+
+        return await SaveChangesAsync(cancellationToken);
     }
 }

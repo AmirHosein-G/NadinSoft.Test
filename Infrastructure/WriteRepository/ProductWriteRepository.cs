@@ -1,7 +1,5 @@
-﻿using Application.Abstractions;
-using Domain.Abstractions;
+﻿using Domain.Abstractions;
 using Domain.Entiys;
-using System.Threading;
 
 namespace Infrastructure.WriteRepository;
 
@@ -26,7 +24,8 @@ public class ProductWriteRepository : IProductWriteRepository
 
     public async Task<bool> InsertAsync(Product product, CancellationToken cancellationToken)
     {
-        await _context.Set<Product>().AddAsync(product);
+        await _context.Set<Product>().AddAsync(product, cancellationToken);
+
         return await SaveChangesAsync(cancellationToken);
     }
 

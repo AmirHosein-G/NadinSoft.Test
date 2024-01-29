@@ -19,14 +19,17 @@ internal sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProduc
 
     public async Task<bool> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        Product product = await _productReadRepository.GetProductAsync(command.product.ProductId, cancellationToken);
+        Product product = await _productReadRepository.GetProductAsync(command.Product.Id, cancellationToken);
 
+        if (product.UserId != command.UserId)
+            throw new Exception("Access denied");
+        
         product.Update(
-            command.product.Name, 
-            command.product.ProduceDate, 
-            command.product.ManufacturePhone,
-            command.product.ManufactureEmail, 
-            command.product.IsAvailable);
+            command.Product.Name, 
+            command.Product.ProduceDate, 
+            command.Product.ManufacturePhone,
+            command.Product.ManufactureEmail, 
+            command.Product.IsAvailable);
 
         return await _productWriteRepository.SaveChangesAsync(cancellationToken);
     }

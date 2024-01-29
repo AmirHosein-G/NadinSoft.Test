@@ -17,9 +17,7 @@ internal sealed class CreateUserCommandHandler : IRequestHandler<CreateUserComma
     {
         User user = new(command.User.UserName, command.User.Password);
 
-        await _identityWriteRepository.InsertAsync(user, cancellationToken);
-
-        return await _identityWriteRepository.SaveChangesAsync(cancellationToken);
+        return await _identityWriteRepository.InsertAsync(user, cancellationToken);
     }
 }
 

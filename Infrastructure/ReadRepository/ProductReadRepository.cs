@@ -15,11 +15,21 @@ public class ProductReadRepository : IProductReadRepository
         _context = context;
     }
 
-    public async Task<List<ProductDto>> GetProductsAsync(CancellationToken cancellationToken)
-    => new List<ProductDto>(await ProductQuery().Select(x => new ProductDto(x)).ToListAsync(cancellationToken));
+    public async Task<List<ProductDto>> GetProductsAsync(int? userId, CancellationToken cancellationToken)
+    {
+        return userId switch
+        {
+            null => new List<ProductDto>(await ProductQuery()
+                        .Where(x => !x.Deleted)
+                        .Select(x => new ProductDto(x)).ToListAsync(cancellationToken)),
+            _ => new List<ProductDto>(await ProductQuery()
+            .Where(x => x.UserId == userId && !x.Deleted)
+            .Select(x => new ProductDto(x)).ToListAsync(cancellationToken)),
+        };
+    }
 
     public async Task<Product> GetProductAsync(int productId, CancellationToken cancellationToken)
-    => await ProductQuery().FirstAsync(x => x.Id == productId, cancellationToken);
+    => await ProductQuery().FirstAsync(x => x.Id == productId && !x.Deleted, cancellationToken);
 
     private IQueryable<Product> ProductQuery() => _context.Products;
 

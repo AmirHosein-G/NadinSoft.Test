@@ -10,9 +10,7 @@ namespace Infrastructure;
 public class ApplicationDbContext : DbContext, IUnitOfWork
 {
     public ApplicationDbContext(DbContextOptions options): base(options)
-    {
-            
-    }
+    { }
 
     #region Db sets
     public virtual DbSet<User> Users{ get; set; }

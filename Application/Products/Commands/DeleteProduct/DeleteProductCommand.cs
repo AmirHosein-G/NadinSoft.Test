@@ -1,6 +1,5 @@
-﻿using Domain.Dto.ProductDtos;
-using MediatR;
+﻿using MediatR;
 
 namespace Application.Products.Commands.CreateProduct;
 
-public sealed record DeleteProductCommand(int productId, int userId) : IRequest<bool>;
+public sealed record DeleteProductCommand(int ProductId, int UserId) : IRequest<bool>;

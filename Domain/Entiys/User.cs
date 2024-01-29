@@ -15,10 +15,15 @@ public class User : Entity
     {
         UserName = userName;
         Password = password;
+        _products = new List<Product>();
     }
     [MaxLength(500)]
     public string UserName { get; set; }
     [MaxLength(16)]
     public string Password { get; set; }
+
+    private readonly List<Product> _products;
+    public virtual IReadOnlyCollection<Product> Products => _products;
+
 
 }

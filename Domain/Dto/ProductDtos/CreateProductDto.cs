@@ -16,6 +16,4 @@ public class CreateProductDto
     public string ManufacturePhone { get; set; } = string.Empty;
     public string ManufactureEmail { get; set; } = string.Empty;
     public bool IsAvailable { get; set; }
-
-    public int UserId { get; set; }
 }

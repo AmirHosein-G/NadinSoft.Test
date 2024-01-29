@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Application.Products.Commands.CreateProduct;
 
-public sealed record CreateProductCommand(CreateProductDto product) : IRequest<bool>;
+public sealed record CreateProductCommand(CreateProductDto Product, int UserId) : IRequest<bool>;
