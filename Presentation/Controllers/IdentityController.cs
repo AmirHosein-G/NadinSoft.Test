@@ -1,5 +1,4 @@
 ﻿using Application.dentity.Commands.CreateUser;
-using Application.dentity.Queries.GetUser;
 using Domain.Dto.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

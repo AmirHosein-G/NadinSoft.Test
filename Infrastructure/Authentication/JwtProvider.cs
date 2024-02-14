@@ -17,14 +17,8 @@ internal sealed class JwtProvider : IJwtProvider
         _jwtOptions = jwtOptions.Value;
     }
 
-    public string Generate(UserDto user, CancellationToken cancellationToken = default)
+    public string Generate(List<Claim> claims, CancellationToken cancellationToken = default)
     {
-        var claims = new Claim[] 
-        { 
-            new Claim(JwtRegisteredClaimNames.Sub, "2") ,//user.UserId.ToString()),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.UserName)
-        };
-
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes("hsnistheprovider1375secretkeyofhsn")),

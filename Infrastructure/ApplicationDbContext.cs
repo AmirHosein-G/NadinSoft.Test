@@ -2,6 +2,7 @@
 using Domain.Abstractions;
 using Domain.Entiys;
 using MediatR;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -9,7 +10,7 @@ namespace Infrastructure;
 
 public class ApplicationDbContext : DbContext, IUnitOfWork
 {
-    public ApplicationDbContext(DbContextOptions options): base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
     { }
 
     #region Db sets

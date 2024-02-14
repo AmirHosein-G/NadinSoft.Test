@@ -12,6 +12,7 @@ public static class PrepDB
         using var serviceScope = app.ApplicationServices.CreateScope();
 
         SeedData(context: serviceScope.ServiceProvider.GetService<ApplicationDbContext>());
+        SeedAuth(context: serviceScope.ServiceProvider.GetService<AuthenticationDbContext>());
     }
 
     public static void SeedData(ApplicationDbContext context)
@@ -43,6 +44,14 @@ public static class PrepDB
         {
             Console.WriteLine("Already hav data - Not Seeding");
         }
+
+        Console.WriteLine("Migration has ben made");
+    }
+    public static void SeedAuth(AuthenticationDbContext context)
+    {
+        Console.WriteLine("Appling Migrations...");
+
+        context.Database.Migrate();
 
         Console.WriteLine("Migration has ben made");
     }

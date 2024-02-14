@@ -22,8 +22,9 @@ public class IdentityReadRepository: IIdentityReadRepository
     //    };
 
     public async Task<UserDto> GetUserAsync(string username, string password, CancellationToken cancellationToken) =>
-        new UserDto(
-            await _context.Users.FirstAsync(x => 
-            x.UserName == username && x.Password == password, 
-                cancellationToken));
+    new UserDto(
+        await _context.Users.FirstAsync(x => 
+
+        x.UserName == username && x.Password == password,
+            cancellationToken));
 }

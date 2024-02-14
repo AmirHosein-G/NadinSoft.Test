@@ -1,8 +1,12 @@
 ﻿using Application.dentity.Commands.CreateUser;
-using Application.dentity.Queries.GetUser;
+using Application.dentity.Commands.Login;
 using Domain.Dto.Identity;
+using Domain.Entiys;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace API.Controllers;
 
@@ -11,10 +15,12 @@ namespace API.Controllers;
 public sealed class IdentityController : ControllerBase
 {
     public readonly IMediator mediator;
+
     public IdentityController(IMediator mediator)
     {
         this.mediator = mediator;
     }
+
 
     [HttpPost("Register")]
     public async Task<ActionResult> Register(CreateUserDto model, CancellationToken cancellationToken)
@@ -27,7 +33,7 @@ public sealed class IdentityController : ControllerBase
                 throw new Exception("Upration failure");
             }
 
-            return RedirectToAction("Login", new LoginQuery(model.UserName, model.Password));
+            return Ok(result);
         }
         catch (Exception ex)
         {
@@ -35,19 +41,18 @@ public sealed class IdentityController : ControllerBase
         }
     }
 
-    [HttpGet("Login")]
-    public async Task<ActionResult> Login([FromQuery]LoginDto model, CancellationToken cancellationToken)
+    [HttpPost("Login")]
+    public async Task<ActionResult> Login([FromQuery] LoginDto model, CancellationToken cancellationToken)
     {
         try
         {
-            //Login action acctually shoud be a command to keep track of users but in his case it just porvieds a jwt token
-            LoginResponce result = await mediator.Send(new LoginQuery(model.UserName, model.Password), cancellationToken);
+            LoginResponce result = await mediator.Send(new LoginCommand(model.UserName, model.Password), cancellationToken);
 
             return Ok(result);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return Unauthorized(ex.Message);
         }
     }
 }
