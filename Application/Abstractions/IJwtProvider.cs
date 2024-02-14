@@ -1,8 +1,9 @@
 ﻿using Domain.Dto.Identity;
+using System.Security.Claims;
 
 namespace Application.Abstractions;
 
 public interface IJwtProvider 
 {
-    string Generate(UserDto user, CancellationToken cancellationToken = default);
+    string Generate(List<Claim> claims, CancellationToken cancellationToken = default);
 }

@@ -11,7 +11,7 @@ public class UserDto
     public UserDto(User user)
     {
         UserId = user.Id;
-        UserName = user.UserName;   
+        UserName = user.UserName;
         Password = user.Password;
     }
     public int UserId { get; set; }
